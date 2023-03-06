@@ -1,10 +1,22 @@
 package com.project.board.domain.base;
 
-import org.slf4j.spi.LocationAwareLogger;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
-import java.time.LocalDateTime;
+import javax.persistence.*;
 
-public class BaseEntity {
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+@MappedSuperclass
+@Inheritance(strategy = InheritanceType.JOINED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(indexes = {
+        @Index(columnList = "createdBy")
+})
+public class BaseEntity extends BaseTimeEntity {
+    @CreatedBy
+    private String createdBy;
+    @LastModifiedBy
+    @Column(length = 100)
+    private String modifiedBy;
 }
