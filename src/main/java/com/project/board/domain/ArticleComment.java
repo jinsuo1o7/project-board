@@ -10,10 +10,13 @@ import java.util.Objects;
 
 @Getter
 @ToString
-@Table(indexes = {@Index(columnList = "content")})
+@Table(indexes = {
+        @Index(columnList = "content"),
+        @Index(columnList = "createdAt"),
+        @Index(columnList = "createdBy"),
+})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 public class ArticleComment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +36,7 @@ public class ArticleComment extends BaseEntity {
         this.article = article;
     }
 
-    private ArticleComment(Article article,String content) {
+    private ArticleComment(Article article, String content) {
         this.article = article;
         this.content = content;
     }
