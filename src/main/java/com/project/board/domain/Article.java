@@ -15,9 +15,10 @@ import java.util.Objects;
 @Table(indexes = {
         @Index(columnList = "title"),
         @Index(columnList = "hashtag"),
+        @Index(columnList = "createdAt"),
+        @Index(columnList = "createdBy"),
 })
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 public class Article extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
