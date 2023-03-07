@@ -32,7 +32,6 @@ class ArticleControllerTest {
                 .andExpect(model().attributeExists("articles"));
     }
 
-    @Disabled("TODO task")
     @DisplayName("[view][GET] article detail page")
     @Test
     void givenNothing_whenRequestingArticleDetailView_thenArticleDetailView() throws Exception {

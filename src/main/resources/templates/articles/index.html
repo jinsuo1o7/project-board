@@ -5,7 +5,7 @@
     <title>게시판 페이지</title>
 </head>
 <body>
-<header th:replace="header :: header"></header>
+<header id="header"></header>
 
 <main>
     <form>
@@ -24,20 +24,20 @@
 
     <table>
         <thead>
-            <tr>
-                <th>제목</th>
-                <th>해시태그</th>
-                <th>작성자</th>
-                <th>작성일</th>
-            </tr>
+        <tr>
+            <th>제목</th>
+            <th>해시태그</th>
+            <th>작성자</th>
+            <th>작성일</th>
+        </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>첫번째 글</td>
-                <td>#java</td>
-                <td>jinsuo</td>
-                <td>2022-03-07</td>
-            </tr>
+        <tr>
+            <td>첫번째 글</td>
+            <td>#java</td>
+            <td>jinsuo</td>
+            <td>2022-03-07</td>
+        </tr>
         </tbody>
     </table>
 
@@ -54,6 +54,6 @@
     </nav>
 </main>
 
-<footer th:replace="footer :: footer"></footer>
+<footer id="footer"></footer>
 </body>
 </html>
