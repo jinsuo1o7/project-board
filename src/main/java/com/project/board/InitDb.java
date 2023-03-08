@@ -28,10 +28,10 @@ public class InitDb {
         private final ArticleCommentRepository articleCommentRepository;
 
         public void initDb() {
-            Article article = Article.of("title", "content", "hashtag");
-            articleRepository.save(article);
-            ArticleComment articleComment = ArticleComment.of(article, "content");
-            articleCommentRepository.save(articleComment);
+//            Article article = Article.of("title", "content", "hashtag");
+//            articleRepository.save(article);
+//            ArticleComment articleComment = ArticleComment.of(article, "content");
+//            articleCommentRepository.save(articleComment);
         }
     }
 }

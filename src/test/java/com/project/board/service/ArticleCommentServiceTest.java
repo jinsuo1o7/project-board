@@ -1,9 +1,11 @@
 package com.project.board.service;
 
 import com.project.board.domain.Article;
+import com.project.board.domain.Member;
 import com.project.board.dto.ArticleCommentDto;
 import com.project.board.repository.ArticleCommentRepository;
 import com.project.board.repository.ArticleRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +34,7 @@ class ArticleCommentServiceTest {
         // Given
         Long id = 1L;
         given(articleRepository.findById(id)).willReturn(
-                Optional.of(Article.of("title", "content", "#java")));
+                Optional.of(Article.of(Member.of("","","","",""),"title", "content", "#java")));
 
         // When
         List<ArticleCommentDto> comments = sut.searchArticleComment(id);

@@ -25,9 +25,11 @@ public class ArticleService {
 
     }
 
+    @Transactional
     public void updateArticle(Long id, ArticleUpdateDto dto) {
     }
 
+    @Transactional
     public void deleteArticle(Long id) {
 
     }
