@@ -2,7 +2,6 @@ package com.project.board.domain;
 
 import com.project.board.domain.base.BaseEntity;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Getter
-@ToString
+@ToString(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(indexes = {
         @Index(columnList = "title"),
@@ -21,7 +20,7 @@ import java.util.Objects;
 @Entity
 public class Article extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "article_id")
     private Long id;
 
@@ -33,19 +32,25 @@ public class Article extends BaseEntity {
     @Setter
     private String hashtag;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
-    @OrderBy(value = "id")
     @ToString.Exclude
+    @OrderBy(value = "createdAt DESC")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<ArticleComment> articleComments = new ArrayList<>();
 
-    private Article(String title, String content, String hashtag) {
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberId")
+    private Member member;
+
+    private Article(Member member, String title, String content, String hashtag) {
+        this.member = member;
         this.title = title;
         this.content = content;
         this.hashtag = hashtag;
     }
 
-    public static Article of(String title, String content, String hashtag) {
-        return new Article(title, content, hashtag);
+    public static Article of(Member member,String title, String content, String hashtag) {
+        return new Article(member, title, content, hashtag);
     }
 
     @Override

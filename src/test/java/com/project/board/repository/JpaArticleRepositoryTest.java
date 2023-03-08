@@ -3,7 +3,9 @@ package com.project.board.repository;
 import com.project.board.config.JpaConfig;
 import com.project.board.domain.Article;
 import com.project.board.domain.ArticleComment;
+import com.project.board.domain.Member;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,15 @@ import static org.assertj.core.api.Assertions.*;
 class JpaArticleRepositoryTest {
     private final ArticleRepository articleRepository;
     private final ArticleCommentRepository articleCommentRepository;
+    private final MemberRepository memberRepository;
 
     public JpaArticleRepositoryTest(@Autowired ArticleRepository articleRepository,
-                                    @Autowired ArticleCommentRepository articleCommentRepository) {
+                                    @Autowired ArticleCommentRepository articleCommentRepository,
+                                    @Autowired MemberRepository memberRepository
+    ) {
         this.articleRepository = articleRepository;
         this.articleCommentRepository = articleCommentRepository;
+        this.memberRepository = memberRepository;
     }
     @DisplayName("select test")
     @Test
@@ -45,11 +51,13 @@ class JpaArticleRepositoryTest {
         // Given
         long prevArticleTotal = articleRepository.count();
         long prevArticleCommentTotal = articleCommentRepository.count();
+        Member member = Member.of("choijinsuo", "password", "email", "nickname", "memo");
+        memberRepository.save(member);
 
         // When
-        Article newArticle = Article.of("new title", "new content", "new hash tag");
+        Article newArticle = Article.of(member,"new title", "new content", "new hash tag");
         articleRepository.save(newArticle);
-        ArticleComment newContent = ArticleComment.of(newArticle, "new content");
+        ArticleComment newContent = ArticleComment.of(member, newArticle, "new content");
         articleCommentRepository.save(newContent);
 
         // Then

@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Getter
-@ToString
+@ToString(callSuper = true)
 @Table(indexes = {
         @Index(columnList = "content"),
         @Index(columnList = "createdAt"),
@@ -19,7 +19,7 @@ import java.util.Objects;
 @Entity
 public class ArticleComment extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "article_comment_id")
     private Long id;
 
@@ -32,17 +32,22 @@ public class ArticleComment extends BaseEntity {
     @ToString.Exclude
     private Article article;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     public void setArticle(Article article) {
         this.article = article;
     }
 
-    private ArticleComment(Article article, String content) {
+    private ArticleComment(Member member, Article article, String content) {
+        this.member = member;
         this.article = article;
         this.content = content;
     }
 
-    public static ArticleComment of(Article article, String content) {
-        return new ArticleComment(article, content);
+    public static ArticleComment of(Member member, Article article, String content) {
+        return new ArticleComment(member, article, content);
     }
 
     @Override
