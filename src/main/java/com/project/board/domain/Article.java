@@ -2,7 +2,6 @@ package com.project.board.domain;
 
 import com.project.board.domain.base.BaseEntity;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.ArrayList;
