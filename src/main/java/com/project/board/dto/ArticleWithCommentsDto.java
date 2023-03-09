@@ -19,7 +19,7 @@ public record ArticleWithCommentsDto(
         LocalDateTime createdAt,
         String createdBy,
         LocalDateTime modifiedAt,
-        String ModifiedBy
+        String modifiedBy
 ) {
 
     public static ArticleWithCommentsDto of(Long id, MemberDto memberDto, List<ArticleCommentDto> articleCommentDtos,String title, String content, String hashtag, LocalDateTime createdAt, String createdBy, LocalDateTime modifiedAt, String ModifiedBy) {

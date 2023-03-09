@@ -4,7 +4,6 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * A DTO for the {@link com.project.board.domain.ArticleComment} entity
@@ -25,13 +24,13 @@ public record ArticleWithCommentResponse(
         return new ArticleWithCommentResponse(id, title, content, hashtag, createdAt, email, nickname, articleCommentsResponse);
     }
 
-    public static ArticleWithCommentResponse toDto(ArticleWithCommentsDto dto) {
+    public static ArticleWithCommentResponse toRes(ArticleWithCommentsDto dto) {
         String name = dto.memberDto().nickname();
         if (StringUtils.hasText(name)) {
             name = dto.memberDto().accountId();
         }
 
-        return new ArticleWithCommentResponse(
+        return ArticleWithCommentResponse.of(
                 dto.id(),
                 dto.title(),
                 dto.content(),
