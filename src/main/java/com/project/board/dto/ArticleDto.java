@@ -1,6 +1,6 @@
 package com.project.board.dto;
 
-import com.querydsl.core.annotations.QueryProjection;
+import com.project.board.domain.Article;
 
 import java.time.LocalDateTime;
 
@@ -8,23 +8,35 @@ import java.time.LocalDateTime;
  * A DTO for the {@link com.project.board.domain.Article} entity
  */
 public record ArticleDto(
-        LocalDateTime createdAt,
-        String createdBy,
+        Long id,
+        MemberDto memberDto,
         String title,
         String content,
-        String hashtag
+        String hashtag,
+        LocalDateTime createdAt,
+        String createdBy,
+        LocalDateTime modifiedAt,
+        String ModifiedBy
 ) {
 
-    @QueryProjection
-    public ArticleDto(LocalDateTime createdAt, String createdBy, String title, String content, String hashtag) {
-        this.createdAt = createdAt;
-        this.createdBy = createdBy;
-        this.title = title;
-        this.content = content;
-        this.hashtag = hashtag;
+    public static ArticleDto of(Long id, MemberDto memberDto, String title, String content, String hashtag, LocalDateTime createdAt, String createdBy, LocalDateTime modifiedAt, String ModifiedBy) {
+        return new ArticleDto(id, memberDto, title, content, hashtag, createdAt, createdBy, modifiedAt, ModifiedBy);
     }
 
-    public static ArticleDto of(LocalDateTime createdAt, String createdBy, String title, String content, String hashtag) {
-        return new ArticleDto(createdAt, createdBy, title, content, hashtag);
+    public static ArticleDto toDto(Article entity) {
+        return new ArticleDto(
+                entity.getId(),
+                MemberDto.toDto(entity.getMember()),
+                entity.getTitle(),
+                entity.getContent(),
+                entity.getHashtag(),
+                entity.getCreatedAt(),
+                entity.getCreatedBy(),
+                entity.getModifiedAt(),
+                entity.getModifiedBy());
+    }
+
+    public Article toEntity() {
+        return Article.of(memberDto.toEntity(), title, content, hashtag);
     }
 }
