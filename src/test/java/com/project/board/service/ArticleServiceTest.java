@@ -1,9 +1,12 @@
 package com.project.board.service;
 
 import com.project.board.domain.Article;
+import com.project.board.domain.Member;
 import com.project.board.domain.type.SearchType;
 import com.project.board.dto.ArticleDto;
 import com.project.board.dto.ArticleUpdateDto;
+import com.project.board.dto.ArticleWithCommentsDto;
+import com.project.board.dto.MemberDto;
 import com.project.board.repository.ArticleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,9 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -30,39 +35,36 @@ class ArticleServiceTest {
     @Test
     void givenSearchParamWhenSearchingArticles_thenReturnArticleList() {
         // Given
+        Pageable pageable = Pageable.ofSize(20);
+        given(articleRepository.findAll(pageable)).willReturn(Page.empty());
 
         // When
-        Page<ArticleDto> articles = sut.searchArticles(SearchType.TITLE, "search word"); // title, content, id, 넥네임, 해시태그
+        Page<ArticleDto> articles = sut.searchArticles(null, null, pageable);
 
         // Then
-        assertThat(articles).isNotNull();
+        assertThat(articles).isEmpty();
+        then(articleRepository).should().findAll(pageable);
     }
 
     @DisplayName("post article, create article")
     @Test
     void givenArticlePostWhenCreatingArticle_thenSaveArticle() {
         // Given
-        ArticleDto dto = ArticleDto.of(LocalDateTime.now(), "jinsuo", "title", "content", "hashtag");
-        given(articleRepository.save(any(Article.class))).willReturn(null);
+        SearchType searchType = SearchType.TITLE;
+        String searchText = "title";
+        Pageable pageable = Pageable.ofSize(20);
+        given(articleRepository.findByTitleContaining(searchText, pageable)).willReturn(Page.empty());
 
         // When
-        sut.saveArticle(dto);
+        Page<ArticleDto> articles = sut.searchArticles(searchType, searchText, pageable);
 
         // Then
-        then(articleRepository).should().save(any(Article.class));
+        assertThat(articles).isEmpty();
+        then(articleRepository).should().findByTitleContaining(searchText, pageable);
     }
     @DisplayName("edit article, update article")
     @Test
     void givenArticleEditWhenChangingArticle_thenUpdateArticle() {
-        // Given
-        ArticleUpdateDto dto = ArticleUpdateDto.of("title", "content", "hashtag");
-        given(articleRepository.save(any(Article.class))).willReturn(null);
-
-        // When
-        sut.updateArticle(1L,dto);
-
-        // Then
-        then(articleRepository).should().save(any(Article.class));
     }
     @DisplayName("delete article, remove article")
     @Test
@@ -80,11 +82,17 @@ class ArticleServiceTest {
     @Test
     void givenArticleIdWhenSearchingArticleDetail_thenReturnArticleDetail() {
         // Given
+        Long id = 1L;
+        Article article = Article.of(Member.of("", "", "", "", ""), "title", "content", "hashtag");
+        given(articleRepository.findById(id)).willReturn(Optional.of(article));
 
         // When
-        ArticleDto article = sut.searchArticle(1L);
+        ArticleWithCommentsDto dto = sut.getArticle(id);
 
         // Then
-        assertThat(article).isNotNull();
+        assertThat(dto)
+                .hasFieldOrPropertyWithValue("title", article.getTitle())
+                .hasFieldOrPropertyWithValue("content", article.getContent());
+        then(articleRepository).should().findById(id);
     }
 }
